@@ -1,0 +1,15 @@
+# Python build/install artifacts
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+
+# Job script / output artifacts produced at runtime
+cmd.sh
+0output.txt
