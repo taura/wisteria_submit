@@ -23,3 +23,15 @@ then submit a job with one of the cell magics:
 #PJM -o 0output.txt
 ...your job script...
 ```
+
+### Command line (`sub`)
+
+Installing also provides a `sub` command:
+
+```
+# submit the command after '--'
+sub -- echo hello
+
+# submit the contents of a script file, optionally with extra commands appended
+sub -f job.sh -- echo done
+```

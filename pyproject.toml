@@ -15,8 +15,11 @@ dependencies = [
     "ipywidgets",
 ]
 
+[project.scripts]
+sub = "wisteria_submit.cli:main"
+
 [project.urls]
-Homepage = "https://github.com/"
+Homepage = "https://github.com/taura/wisteria_submit"
 
 [tool.setuptools.packages.find]
 where = ["src"]
