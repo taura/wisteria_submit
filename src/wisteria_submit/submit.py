@@ -113,7 +113,7 @@ def bash_submit_a(line, cell):
 #PJM -L elapse=0:01:00
 #PJM -L gpu=1
 #PJM --omp thread=9
-#PJM -g gt47
+#PJM -g gt69
 #PJM -j
 #PJM -o 0output.txt
 """
@@ -125,7 +125,7 @@ def bash_submit_o(line, cell):
 #PJM -L elapse=0:01:00
 #PJM -L node=1
 #PJM --omp thread=48
-#PJM -g gt47
+#PJM -g gt69
 #PJM -j
 #PJM -o 0output.txt
 """

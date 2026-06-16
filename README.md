@@ -19,7 +19,7 @@ then submit a job with one of the cell magics:
 
 ```
 %%bash_submit
-#PJM -L rscgrp=lecture-o
+#PJM -L rscgrp=lecture-a
 #PJM -o 0output.txt
 ...your job script...
 ```
