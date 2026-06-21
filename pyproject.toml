@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wisteria_submit"
-version = "0.1.1"
+version = "0.1.2"
 description = "Utility for submitting jobs on Wisteria from Jupyter"
 readme = "README.md"
 license = { file = "LICENSE" }
