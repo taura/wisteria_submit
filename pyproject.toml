@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "wisteria_submit"
-version = "0.1.2"
+version = "0.1.3"
 description = "Utility for submitting jobs on Wisteria from Jupyter"
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -17,6 +17,8 @@ dependencies = [
 
 [project.scripts]
 sub = "wisteria_submit.cli:main"
+sub_a = "wisteria_submit.cli:main_a"
+sub_o = "wisteria_submit.cli:main_o"
 
 [project.urls]
 Homepage = "https://github.com/taura/wisteria_submit"

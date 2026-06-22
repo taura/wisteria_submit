@@ -267,7 +267,7 @@ def bash_submit_a(line, cell):
 #PJM --omp thread=9
 #PJM -g gt69
 #PJM -j
-#PJM -o 0output.txt
+#PJM -o /dev/null
 """
     return submit_cell(line, opt + cell)
 
@@ -283,7 +283,7 @@ def bash_submit_o(line, cell):
 #PJM --omp thread=48
 #PJM -g gt69
 #PJM -j
-#PJM -o 0output.txt
+#PJM -o /dev/null
 """
     return submit_cell(line, opt + cell)
 

@@ -1,67 +1,68 @@
-"""Command-line entry point: ``sub``.
+"""Command-line entry points: ``sub``, ``sub_a``, ``sub_o``.
 
-Submits a job to Wisteria by reusing :func:`wisteria_submit.submit.bash_submit`.
+Each submits a job to Wisteria by reusing the corresponding function from
+:mod:`wisteria_submit.submit`:
 
-Usage::
+- ``sub``   -> :func:`bash_submit`   (no default #PJM directives)
+- ``sub_a`` -> :func:`bash_submit_a` (defaults for the GPU ``lecture-a`` queue)
+- ``sub_o`` -> :func:`bash_submit_o` (defaults for the node ``lecture-o`` queue)
 
-    sub [-f FILENAME] -- COMMAND [ARGS...]
+Usage, mirroring ``pjsub``::
 
-- Without ``-f``: the command line given after ``--`` is submitted, i.e.
-  ``bash_submit("", COMMAND)``.
-- With ``-f FILENAME``: the contents of FILENAME, followed by whatever comes
-  after ``--``, are submitted together.
+    sub   a.sh
+    sub_a a.sh
+    sub_o a.sh
+
+The named script file is read and submitted as the job body. With no file,
+the body is read from standard input.
 """
 
 import argparse
 import sys
 
-from .submit import bash_submit
+from .submit import bash_submit, bash_submit_a, bash_submit_o
 
 
-def split_argv(argv):
-    """Split argv into (options_before_dashdash, command_after_dashdash)."""
-    if "--" in argv:
-        i = argv.index("--")
-        return argv[:i], argv[i + 1:]
-    return argv, []
+def run(submit_fn, prog, argv):
+    """Shared CLI body: read the script (file or stdin) and submit it.
 
+    ``submit_fn`` is the submit function to call (``bash_submit`` /
+    ``bash_submit_a`` / ``bash_submit_o``); ``prog`` is the command name shown
+    in help/usage.
+    """
+    parser = argparse.ArgumentParser(
+        prog=prog,
+        description="Submit a job to Wisteria (like pjsub).",
+    )
+    parser.add_argument(
+        "script", nargs="?", default=None,
+        help="job script file to submit (read from stdin if omitted)",
+    )
+    args = parser.parse_args(argv)
 
-def build_cell(filename, command):
-    """Build the job-script text to submit."""
-    command_line = " ".join(command)
-    if filename is None:
-        return command_line
-    with open(filename) as fp:
-        contents = fp.read()
-    if command_line:
-        if not contents.endswith("\n"):
-            contents += "\n"
-        return contents + command_line
-    return contents
+    if args.script is None:
+        cell = sys.stdin.read()
+    else:
+        with open(args.script) as fp:
+            cell = fp.read()
+
+    submit_fn("", cell)
+    return 0
 
 
 def main(argv=None):
-    if argv is None:
-        argv = sys.argv[1:]
-    options, command = split_argv(list(argv))
+    """Entry point for ``sub`` (no default #PJM directives)."""
+    return run(bash_submit, "sub", argv if argv is not None else sys.argv[1:])
 
-    parser = argparse.ArgumentParser(
-        prog="sub",
-        description="Submit a job to Wisteria.",
-        epilog="Place the command to run after '--'.",
-    )
-    parser.add_argument(
-        "-f", "--file", dest="file", default=None,
-        help="file whose contents are submitted (plus anything after '--')",
-    )
-    args = parser.parse_args(options)
 
-    if args.file is None and not command:
-        parser.error("nothing to submit: give -f FILENAME and/or a command after '--'")
+def main_a(argv=None):
+    """Entry point for ``sub_a`` (defaults for the GPU ``lecture-a`` queue)."""
+    return run(bash_submit_a, "sub_a", argv if argv is not None else sys.argv[1:])
 
-    cell = build_cell(args.file, command)
-    bash_submit("", cell)
-    return 0
+
+def main_o(argv=None):
+    """Entry point for ``sub_o`` (defaults for the node ``lecture-o`` queue)."""
+    return run(bash_submit_o, "sub_o", argv if argv is not None else sys.argv[1:])
 
 
 if __name__ == "__main__":
