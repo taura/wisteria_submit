@@ -20,7 +20,7 @@ then submit a job with one of the cell magics:
 ```
 %%bash_submit
 #PJM -L rscgrp=lecture-a
-#PJM -o /dev/null
+#PJM -o 0output.txt
 #PJM -j
 ...your job script...
 ```
@@ -29,14 +29,16 @@ then submit a job with one of the cell magics:
 of default `#PJM` directives for the GPU (`lecture-a`) and node (`lecture-o`)
 queues respectively, so the cell only needs the actual commands.
 
-### Recommended `#PJM` directives
+### About `#PJM -o`
 
 The job's standard output (and error) is captured by this tool and streamed
-back to you live, so you do not need the scheduler's own output file. We
-recommend discarding it and merging stderr into stdout:
+back to you live, so the scheduler's own `-o` output file is not used. It
+still has to point at a real file on the Lustre filesystem (e.g. `/dev/null`
+is rejected), so just give it something like `0output.txt` — nothing is ever
+written there, so the name does not matter:
 
 ```
-#PJM -o /dev/null
+#PJM -o 0output.txt
 #PJM -j
 ```
 
